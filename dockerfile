@@ -25,8 +25,5 @@ EXPOSE 3000
 # Set environment variables, if necessary
 ENV RAILS_ENV=development
 
-# Run database migrations, if applicable
-RUN bundle exec rails db:migrate
-
 # Start the Rails server
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
