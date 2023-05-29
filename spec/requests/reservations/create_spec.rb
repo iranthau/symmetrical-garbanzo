@@ -86,7 +86,7 @@ RSpec.describe "POST /reservations", type: :request do
       perform_request
 
       expect(response).to have_http_status(:no_content)
-      expect(Reservations::PayloadProcessorJob).to have_enqueued_sidekiq_job(payload.to_json)
+      expect(Reservations::PayloadProcessorJob).to have_enqueued_sidekiq_job(payload[:reservation].to_json)
     end
   end
 end

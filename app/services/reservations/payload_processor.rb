@@ -9,17 +9,17 @@ module Reservations
     def run
       raise Reservations::PayloadProcessorError.new('A valid payload is required') if parsed_params.blank?
 
-      return Reservations::BookingReservationProcessor.new(booking_reservation_params).run if booking_reservation_params.present?
+      return Reservations::AirBnbReservationProcessor.new(parsed_params).run if airbnb_params?
 
-      Reservations::AirBnbReservationProcessor.new(parsed_params).run
+      Reservations::BookingReservationProcessor.new(parsed_params).run
     end
 
     private
 
     attr_reader :params
 
-    def booking_reservation_params
-      @booking_reservation_params ||= parsed_params[:reservation]
+    def airbnb_params?
+      parsed_params[:reservation_code].present?
     end
 
     def parsed_params

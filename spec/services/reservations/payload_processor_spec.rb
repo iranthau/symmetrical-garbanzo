@@ -14,21 +14,19 @@ RSpec.describe Reservations::PayloadProcessor, type: :service do
       end
     end
 
-    context 'when the params contain the key reservation' do
+    context 'when the params do NOT contain the key reservation_code' do
       let(:params) do
         {
-          reservation: {
-            code: "XXX12345678",
-            start_date: "2021-03-12",
-            end_date: "2021-03-16",
-            expected_payout_amount: "3800.00"
-          }
+          code: "XXX12345678",
+          start_date: "2021-03-12",
+          end_date: "2021-03-16",
+          expected_payout_amount: "3800.00"
         }
       end
       let(:booking_processor) { instance_double(Reservations::BookingReservationProcessor, run: nil) }
 
       before do
-        allow(Reservations::BookingReservationProcessor).to receive(:new).with(params[:reservation]).and_return(booking_processor)
+        allow(Reservations::BookingReservationProcessor).to receive(:new).with(params).and_return(booking_processor)
       end
 
       it 'runs the BookingReservationProcessor' do
@@ -38,7 +36,7 @@ RSpec.describe Reservations::PayloadProcessor, type: :service do
       end
     end
 
-    context 'when the params do not contain the key reservation' do
+    context 'when the params contain the key reservation_code' do
       let(:params) do
         {
           reservation_code: "YYY12345678",
