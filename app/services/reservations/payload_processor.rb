@@ -7,9 +7,9 @@ module Reservations
     end
 
     def run
-      raise Reservations::PayloadProcessorError.new('A valid payload is required') if params.blank?
+      raise Reservations::PayloadProcessorError.new('A valid payload is required') if parsed_params.blank?
 
-      # Reservations::BookingReservationProcessor.new(booking_reservation_params).run if booking_reservation_params.present?
+      return Reservations::BookingReservationProcessor.new(booking_reservation_params).run if booking_reservation_params.present?
 
       Reservations::AirBnbReservationProcessor.new(parsed_params).run
     end
