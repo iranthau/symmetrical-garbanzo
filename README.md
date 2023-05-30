@@ -44,7 +44,6 @@ RAILS_ENV=test bundle exec rspec <test file/folder name>
 2. Have set up the project for following best practices.
 3. Uses background processing to process payloads.
 4. Use rspecs for testing and other libraries such as factorybot, ffaker.
-5. Solution is not fully completed due to time restrictions.
+5. Successfully process the AirBnb payload.
+6. Booking.com payload is not implemented yet.
 
-## Known issues
-1. May have issues saving the payload due to guest is not being saved in the payload processors.

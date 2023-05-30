@@ -3,28 +3,35 @@ module Reservations
 
   class AirBnbReservationProcessor
     VALID_PARAMS = %w[
-      reservation_code
-      start_date
-      end_date
-      nights
-      guests
       adults
       children
-      infants
-      status
-      guest
       currency
+      end_date
+      guest
+      guests
+      infants
+      nights
       payout_price
+      reservation_code
       security_price
+      start_date
+      status
       total_price
     ]
 
     SPECIAL_ATTRS = %w[
-      reservation_code
       guest
+      reservation_code
     ]
 
     RESERVATION_ATTRS = VALID_PARAMS - SPECIAL_ATTRS
+
+    GUEST_ATTRS = %w[
+      email
+      first_name
+      last_name
+      phone
+    ]
 
     def initialize(params)
       @params = params
@@ -33,6 +40,7 @@ module Reservations
     def run
       raise Reservations::AirBnbReservationProcessorError.new('A valid payload is required') unless valid_params?
 
+      guest.save!
       reservation.update!(reservation_params)
     end
 
@@ -49,11 +57,27 @@ module Reservations
     end
 
     def reservation
-      @reservation ||= Reservation.find_or_initialize_by(code: reservation_code)
+      @reservation ||= guest.reservations.find_or_initialize_by(code: reservation_code)
     end
 
     def reservation_params
       params.slice(*RESERVATION_ATTRS)
+    end
+
+    def guest_params
+      params[:guest].slice(*GUEST_ATTRS)
+    end
+
+    def guest_email
+      guest_params[:email]
+    end
+
+    def guest
+      @guest ||= Guest.find_or_initialize_by(email: guest_email) do |g|
+        g.first_name = guest_params[:first_name]
+        g.last_name = guest_params[:last_name]
+        g.phone_numbers << guest_params[:phone]
+      end
     end
   end
 end
